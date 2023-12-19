@@ -1,0 +1,42 @@
+0 Abdim's White Billed Stork
+1 African Fish-Eagle
+2 African White-backed Vulture
+3 Black Kite
+4 Green Wood Hoopoe
+5 Grey-headed Kingfisher
+6 Little Grebe
+7 Long-crested Eagle
+8 Marabou Stork
+9 Ostrich
+10 Pel's Fishing Owl
+11 Secretary Bird
+12 Speckled Mousebird
+13 Yellow-Billed Stork
+14 African Openbill Stork
+15 Woolly-necked Stork
+16 Black Stork
+17 White Stork
+18 Sacred Ibis 
+19 African Spoonbill
+20 Hottentot Teal 
+21 Northern Pintail
+22 African Hawk-Eagle
+23 Scaly Francolin
+24 Black-winged Stilt
+25 African Jacana
+26 Crowned Lapwing
+27 Tambourine Dove
+28 African Olive Pigeon
+29 Red-eyed Dove
+30 Meyer's Parrot
+31 Blue-naped Mousebird
+32 Southern Ground Hornbill
+33 African Cuckoo
+34 African Wood-Owl 
+35 Little Swift
+36 European Roller
+37 Lilac-breasted Roller 
+38 Broad-billed Roller
+39 African Hoopoe 
+40 Common Scimitarbill
+41 Abyssinian Scimitarbill 
