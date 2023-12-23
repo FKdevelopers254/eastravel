@@ -17,13 +17,6 @@ But that's not all - we also offer a way for users to earn cash by listing their
 So whether you're looking to book your dream vacation or simply explore the world around you, our travel app has everything you need to get started.
 
 
+<img width="1153" alt="Untitled" src="https://github.com/FKdevelopers254/TravelApp/assets/65674370/c42ef0e9-adbb-4d94-bf33-c670a3d9ff49">
 
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
