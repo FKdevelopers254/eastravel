@@ -12,12 +12,14 @@
           "package_name": "com.example.eastravel"
         }
       },
+
       "oauth_client": [
         {
           "client_id": "12067241649-j99v6j76okqpallsn2hl2la8secrmvt1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
+
       "api_key": [
         {
           "current_key": "AIzaSyBfatvhDVslBEscD9ua4ZRDKvyc0ql8I7Y"

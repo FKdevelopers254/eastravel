@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+import '../caradmin/homescreen.dart';
 import '../hoteladmin/homescreen.dart';
 
 
@@ -95,6 +96,18 @@ class _HotelPState extends State<HotelP> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   GestureDetector(
+                    onLongPress:  () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CarHomeP()),
+                      );
+                    },
+                    onDoubleTap:  () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const HomeScreenSafari()),
+                      );
+                    },
                       onTap: () {
                         Navigator.push(
                           context,

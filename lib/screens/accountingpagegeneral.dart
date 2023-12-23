@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eastravel/languagetranslator/languages/swahili.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,7 @@ import '../languagetranslator/languagechoosetranslate.dart';
 import '../languagetranslator/languages/list.dart';
 import '../languagetranslator/languageteacherlistener.dart';
 import '../languagetranslator/listener.dart';
+import '../mechaniclocator.dart';
 import '../spottedanimal.dart';
 import '../templates/profilepage.dart';
 import '../templates/tabpage.dart';
@@ -45,188 +47,63 @@ class _MainAccountState extends State<MainAccount> {
   Widget build(BuildContext context) {
     return  ListView(
       children: [
+        Stack(
+          children: <Widget>[
+            Container(
+              height: 55.0,
 
+              decoration:   BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+
+
+
+                  )
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0,left: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 5,),
+                  GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: const Text(
+                      'My Account',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                      onTap: () {
+
+                      },
+                      child: Lottie.asset('assets/icons/92893-man-waiting-car.json',height: 50,)),
+                  SizedBox(width: 5,),
+                ],
+              ),
+
+
+            ),
+
+
+          ],
+        ),
         Container(
           // autogroupftmnh3n (2Rx5e6o8oyEMBY4MriFtMN)
-          padding:  EdgeInsets.fromLTRB(12.09*fem, 1*fem, 12.09*fem, 83*fem),
+       //   padding:  EdgeInsets.fromLTRB(12.09*fem, 1*fem, 12.09*fem, 83*fem),
           width:  double.infinity,
           child:
           Column(
               crossAxisAlignment:  CrossAxisAlignment.center,
               children:  [
-                Container(
-                  // profileringNzU (0:2330)
-                  margin:  EdgeInsets.fromLTRB(37.91*fem, 0*fem, 37.91*fem, 4*fem),
-                  child:
-                  TextButton(
-                    onPressed:  () {},
-                    style:  TextButton.styleFrom (
-                      padding:  EdgeInsets.zero,
-                    ),
-                    child:
-                    Container(
-                      width:  double.infinity,
-                      height:  220*fem,
-                      child:
-                      Container(
-                        // frame34sJ (I0:2330;74:455)
-                        width:  double.infinity,
-                        height:  double.infinity,
-                        child:
-                        Stack(
-                          children:  [
-                            Positioned(
-                              // ellipse21oK6 (I0:2330;74:375)
-                              left:  35*fem,
-                              top:  25*fem,
-                              child:
-                              Align(
-                                child:
-                                SizedBox(
-                                  width:  160*fem,
-                                  height:  160*fem,
-                                  child:
-                                  Container(
-                                    decoration:  BoxDecoration (
-                                      borderRadius:  BorderRadius.circular(105*fem),
-                                      border:  Border.all(color:Color(0xffed1b24)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              // ellipse22URE (I0:2330;74:376)
-                              left:  30*fem,
-                              top:  20*fem,
-                              child:
-                              Align(
-                                child:
-                                SizedBox(
-                                  width:  170*fem,
-                                  height:  170*fem,
-                                  child:
-                                  Container(
-                                    decoration:  BoxDecoration (
-                                      borderRadius:  BorderRadius.circular(110*fem),
-                                      border:  Border.all(color:Color(0xcced1b24)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              // ellipse23YAC (I0:2330;74:377)
-                              left:  25*fem,
-                              top:  15*fem,
-                              child:
-                              Align(
-                                child:
-                                SizedBox(
-                                  width:  180*fem,
-                                  height:  180*fem,
-                                  child:
-                                  Container(
-                                    decoration:  BoxDecoration (
-                                      borderRadius:  BorderRadius.circular(115*fem),
-                                      border:  Border.all(color:Color(0x99ed1b24)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              // ellipse24Qy6 (I0:2330;74:378)
-                              left:  20*fem,
-                              top:  10*fem,
-                              child:
-                              Align(
-                                child:
-                                SizedBox(
-                                  width:  190*fem,
-                                  height:  190*fem,
-                                  child:
-                                  Container(
-                                    decoration:  BoxDecoration (
-                                      borderRadius:  BorderRadius.circular(120*fem),
-                                      border:  Border.all(color:Color(0x66ed1b24)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              // ellipse25JHn (I0:2330;74:379)
-                              left:  15*fem,
-                              top:  5*fem,
-                              child:
-                              Align(
-                                child:
-                                SizedBox(
-                                  width:  200*fem,
-                                  height:  200*fem,
-                                  child:
-                                  Container(
-                                    decoration:  BoxDecoration (
-                                      borderRadius:  BorderRadius.circular(125*fem),
-                                      border:  Border.all(color:Color(0x33ed1b24)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              // ellipse26x7S (I0:2330;74:380)
-                              left:  10*fem,
-                              top:  0*fem,
-                              child:
-                              Align(
-                                child:
-                                SizedBox(
-                                  width:  210*fem,
-                                  height:  210*fem,
-                                  child:
-                                  Container(
-                                    decoration:  BoxDecoration (
-                                      borderRadius:  BorderRadius.circular(130*fem),
-                                      border:  Border.all(color:Color(0x19ed1b24)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              // ellipse15zpp (I0:2330;74:381)
-                              left:  40*fem,
-                              top:  30*fem,
-                              child:
-                              Align(
-                                child:
-                                SizedBox(
-                                  width:  150*fem,
-                                  height:  150*fem,
-                                  child:
-                                  Container(
-                                    decoration:  BoxDecoration (
-                                      borderRadius:  BorderRadius.circular(100*fem),
-                                      border:  Border.all(color:Color(0x4cffffff)),
-                                      image:  DecorationImage (
-                                        fit:  BoxFit.cover,
-                                        image:  AssetImage('assets/images/gondola.jpg'),
-
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
                 StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: FirebaseFirestore.instance
                       .collection('users')
@@ -273,22 +150,9 @@ class _MainAccountState extends State<MainAccount> {
                     }
                   },
                 ),
-
                 //USER PROFILE IMAGE
-
-
-
-
-
 //Email
-
-
-
-
-
-        //Wishlist
-
-
+// Wishlist
         //Scan QR CODE AND BADGES
         Container(
         // frame21JW4 (0:2390)
@@ -315,25 +179,17 @@ class _MainAccountState extends State<MainAccount> {
             ),
           ),
           Lottie.asset('assets/icons/trophy.json',height: 70),
-
-
         ],
         ),
         ),
         ),
-
-
-
-
-
-
 //Logout
         Container(
         // line1pic (0:2336)
         margin:  EdgeInsets.fromLTRB(7.91*fem, 0*fem, 7.91*fem, 27*fem),
         width:  double.infinity,
         height:  1*fem,
-        decoration:  BoxDecoration (
+        decoration:  const BoxDecoration (
         color:  Color(0x7fffffff),
         ),
         ),
@@ -347,7 +203,7 @@ class _MainAccountState extends State<MainAccount> {
         child:
         Row(
           children: [
-            Icon(Icons.logout,color: Colors.white,),
+            const Icon(Icons.logout,color: Colors.white,),
             TextButton(
             onPressed:  () {},
             style:  TextButton.styleFrom (
@@ -399,7 +255,7 @@ class _ToolsState extends State<Tools> {
 
               decoration:   BoxDecoration(
                   color: Theme.of(context).primaryColor.withOpacity(0.8),
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
 
 
 
@@ -407,18 +263,18 @@ class _ToolsState extends State<Tools> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 15.0,left: 15.0),
+              padding: const EdgeInsets.only(top: 15.0,left: 15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                   GestureDetector(
                     onTap: () {
 
                     },
-                    child: Text(
+                    child: const Text(
                       'My Tools',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 20.0,
                         color: Colors.white,
@@ -431,6 +287,7 @@ class _ToolsState extends State<Tools> {
 
                       },
                       child: Lottie.asset('assets/icons/133390-hotel-pop-up.json',height: 50,)),
+
                   SizedBox(width: 5,),
                 ],
               ),
@@ -450,12 +307,6 @@ class _ToolsState extends State<Tools> {
           Column(
             crossAxisAlignment:  CrossAxisAlignment.center,
             children:  [
-
-
-
-
-
-
               //Animals Spotted
               Container(
                 // frame21JW4 (0:2390)
@@ -489,37 +340,6 @@ class _ToolsState extends State<Tools> {
                 ),
               ),
               //Language Translator
-              Container(
-                // frame21JW4 (0:2390)
-
-                child:
-                TextButton(
-                  onPressed:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => LearnSwahili(),),);},
-                  style:  TextButton.styleFrom (
-                    padding:  EdgeInsets.zero,
-                  ),
-                  child:
-                  Row(
-                    crossAxisAlignment:  CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:  [
-                      Text(
-                        'Language Translator',
-                        style:  GoogleFonts.inter (
-
-                          fontSize:  20*ffem,
-                          fontWeight:  FontWeight.w600,
-                          height:  1.2125*ffem/fem,
-                          color:  Colors.black,
-                        ),
-                      ),
-                      Lottie.asset('assets/icons/translator.json',height: 50),
-
-
-                    ],
-                  ),
-                ),
-              ),
               //Bird Identifier
               Container(
                 // frame21JW4 (0:2390)
@@ -552,14 +372,9 @@ class _ToolsState extends State<Tools> {
                   ),
                 ),
               ),
-
               //Mechanic locator
-              Container(
-                // frame21JW4 (0:2390)
-
-                child:
-                TextButton(
-                  onPressed:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalSpottedPage(),),);},
+              Container(child: TextButton(
+                  onPressed:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => MechanicLocator(),),);},
                   style:  TextButton.styleFrom (
                     padding:  EdgeInsets.zero,
                   ),
@@ -578,116 +393,13 @@ class _ToolsState extends State<Tools> {
                           color:  Colors.black,
                         ),
                       ),
-                      Lottie.asset('assets/icons/73387-tourist-travel.json',height: 50),
+                      Lottie.asset('assets/icons/136901-scale-loop-animation.json',height: 50),
 
 
                     ],
                   ),
-                ),
-              ),
-
-
+                ),),
 //Paypal
-              Container(
-                // frame21JW4 (0:2390)
-
-                child:
-                TextButton(
-
-                  onPressed:  () {
-
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-
-                          PaypalCheckout(
-                            sandboxMode: true,
-                            clientId: "AfYlnWmnqqXYtpzbHcDIJuMsiGBmTWZWiMGWyENiTJrAr6iMryrjmwTSu79waheaPBgd2AbvgoJ8QJHq",
-                            secretKey: "ECdK3iPxvLLIN9ty8ryen2rPqDGVuvG6b8h7IxLBqQaCuDTQqpet76ZzcNZVqW3pjc51t4CDtZn0dN0A",
-                            returnURL: "com.example.eastravel://paypalpay",
-                            cancelURL: "com.example.eastravel://paypalpay",
-                            transactions: const [
-                              {
-                                "amount": {
-                                  "total": '130',
-                                  "currency": "USD",
-                                  "details": {
-                                    "subtotal": '30',
-                                    "shipping": '100',
-                                    "shipping_discount": 0
-                                  }
-                                },
-                                "description": "The payment transaction description.",
-                                "item_list": {
-                                  "items": [
-                                    {
-                                      "name": "Apple",
-                                      "quantity": 2,
-                                      "price": '5',
-                                      "currency": "USD"
-                                    },
-                                    {
-                                      "name": "Pineapple",
-                                      "quantity": 2,
-                                      "price": '10',
-                                      "currency": "USD"
-                                    }
-                                  ],
-                                  // shipping address is Optional
-                                  "shipping_address": {
-                                    "recipient_name": "Raman Singh",
-                                    "line1": "Nairobi",
-                                    "line2": "",
-                                    "city": "Delhi",
-                                    "country_code": "KE",
-                                    "postal_code": "00100",
-                                    "phone": "+00000000",
-                                    "state": "Texas"
-                                  },
-                                }
-                              }
-                            ],
-                            note: "PAYMENT_NOTE",
-                            onSuccess: (Map params) async {
-                              print("onSuccess: $params");
-                            },
-                            onError: (error) {
-                              print("onError: $error");
-                              Navigator.pop(context);
-                            },
-                            onCancel: () {
-                              print('cancelled:');
-                            },
-                          ),
-
-                    ));
-                  },
-                  style:  TextButton.styleFrom (
-                    padding:  EdgeInsets.zero,
-                  ),
-                  child:
-                  Row(
-                    crossAxisAlignment:  CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:  [
-                      Text(
-                        'Paypal',
-                        style:  GoogleFonts.inter (
-
-                          fontSize:  20*ffem,
-                          fontWeight:  FontWeight.w600,
-                          height:  1.2125*ffem/fem,
-                          color:  Colors.black,
-                        ),
-                      ),
-                      Lottie.asset('assets/icons/73387-tourist-travel.json',height: 50),
-
-
-                    ],
-                  ),
-                ),
-              ),
-
-
 //Logout
 
             ],
@@ -874,7 +586,69 @@ class BadgeScreenn extends StatelessWidget {
     final ffem =0.9;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Badges',style: GoogleFonts.inter(),),),
+      appBar: AppBar(title: Stack(
+        children: <Widget>[
+          Container(
+            height: 55.0,
+
+            decoration:   BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(0.8),
+                borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+
+
+
+                )
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+              GestureDetector(
+
+
+                child:  GestureDetector(
+                  onLongPress: (){FirebaseAuth.instance.signOut();},
+                  // onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
+                  //  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AnimatedTextKit(
+                        animatedTexts: [
+
+                          // TyperAnimatedText(user.email!,textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 17)),
+                          TyperAnimatedText('Badges',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)),
+                          TyperAnimatedText('Travel to Earn Badges',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 22)),
+
+
+
+                        ],
+                        pause: const Duration(milliseconds: 5000),
+
+                        stopPauseOnTap: true,
+                        repeatForever: true,
+                      ),
+
+                      // child:  Text('EAS SAFARIS',style: GoogleFonts.sassyFrass(fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)
+                      //),
+                    ],
+                  ),
+                ),
+                // onTap: Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreen())),
+              ),
+
+              Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                child: GestureDetector(
+                  onTap: (){FirebaseAuth.instance.signOut();},
+                  // onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const BirdApp()));},
+                  child:
+                  Lottie.asset('assets/icons/36352-lion-running.json',height: 50,),
+                ),)
+
+            ],),
+          ),
+        ],
+      ),),
 
       body: SingleChildScrollView(
         child: Column(

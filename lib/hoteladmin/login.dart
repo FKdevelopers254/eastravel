@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.deepPurple,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Sign In',
                           style: TextStyle(
@@ -213,10 +213,10 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Not a Member?',style: TextStyle(fontWeight: FontWeight.bold,),),
+                    const Text('Not a Member?',style: TextStyle(fontWeight: FontWeight.bold,),),
                     GestureDetector(
                       onTap: widget.showRegisterPage,
-                      child: Text(' Register now', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold,
+                      child: const Text(' Register now', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold,
                       ),
                       ),
                     ),

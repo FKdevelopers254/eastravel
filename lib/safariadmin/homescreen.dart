@@ -96,7 +96,7 @@ class _HomeScreenSafariState extends State<HomeScreenSafari> with SingleTickerPr
                                 );
                               },
                               child: const Text(
-                                'Register',
+                                'Add safari',
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 20.0,
@@ -191,7 +191,7 @@ class _HomeScreenSafariState extends State<HomeScreenSafari> with SingleTickerPr
 
 
 
-                const RoomP(),
+                const Safariss(),
               //  BadgeScreen(name: '', email: user.email!, location: '', price: '',),
 
 
@@ -222,14 +222,14 @@ class _HomeScreenSafariState extends State<HomeScreenSafari> with SingleTickerPr
 }
 
 
-class RoomP extends StatefulWidget {
-  const RoomP({Key? key}) : super(key: key);
+class Safariss extends StatefulWidget {
+  const Safariss({Key? key}) : super(key: key);
 
   @override
-  State<RoomP> createState() => _RoomPState();
+  State<Safariss> createState() => _RoomPState();
 }
 
-class _RoomPState extends State<RoomP> {
+class _RoomPState extends State<Safariss> {
   final user = FirebaseAuth.instance.currentUser!;
 
   @override
@@ -264,7 +264,7 @@ class _RoomPState extends State<RoomP> {
 
           void deleteCar(String carId) {
             FirebaseFirestore.instance
-                .collection('rooms')
+                .collection('safaris')
                 .doc(carId)
                 .delete()
                 .then((value) => print('Room deleted'))

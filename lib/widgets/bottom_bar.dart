@@ -48,13 +48,13 @@ class _BottomBarState extends State<BottomBar> {
             items:    [
               BottomNavigationBarItem(
                   icon: Lottie.asset('assets/icons/travelone.json',height: 20),activeIcon: Lottie.asset('assets/icons/traveltwo.json',height: 20), label: 'HOME'),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(Icons.airplane_ticket,),activeIcon: Icon(Icons.search), label: 'Travel') ,
 
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(Icons.settings_applications),activeIcon: Icon(Icons.settings_applications), label: 'Tools'),
 
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(Icons.account_box),activeIcon: Icon(Icons.account_box_outlined), label: 'Account'),
 
             ],
@@ -102,7 +102,7 @@ class _BottomBarState extends State<BottomBar> {
     switch(index){
       case 0:
       //  widget =  CardWithImageAndTextExample();
-        widget =  NewHome();
+        widget =  const NewHome();
         break;
 
       case 1:

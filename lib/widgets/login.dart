@@ -36,15 +36,27 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
     }on FirebaseAuthException catch (e){
+
       if (kDebugMode) {
         print(e);
       }
+
       showDialog(
           context:context,
+
           builder: (context){
             return AlertDialog(
               content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Dismiss the dialog
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
             );
           }
       );
@@ -153,40 +165,29 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12),
-
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                          child: TextField(
-                            controller: _passwordController,
-                            obscureText: _isObscure, // Use the boolean value to determine obscuring
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepPurple),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              hintText: 'Password',
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  _togglePasswordVisibility(); // Toggle the password visibility
-                                },
-                                child: Icon(
-                                  _isObscure ? Icons.visibility : Icons.visibility_off,
-                                  color: Colors.grey,
-                                ),
-                              ),
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: _isObscure, // Use the boolean value to determine obscuring
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.deepPurple),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          hintText: 'Password',
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              _togglePasswordVisibility(); // Toggle the password visibility
+                            },
+                            child: Icon(
+                              _isObscure ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.grey,
                             ),
                           ),
                         ),
@@ -194,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -203,17 +204,17 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return ForgotPasswordPage();
+                            return const ForgotPasswordPage();
                           }));
                         },
-                        child: Text('Forgot Password?',style: TextStyle(color: Colors.blue,fontSize: 15, fontWeight: FontWeight.bold,
+                        child: const Text('Forgot Password?',style: TextStyle(color: Colors.blue,fontSize: 15, fontWeight: FontWeight.bold,
                         ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -225,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.deepPurple,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Sign In',
                           style: TextStyle(
@@ -238,14 +239,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25,),
+                const SizedBox(height: 25,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Not a Member?',style: TextStyle(fontWeight: FontWeight.bold,),),
+                    const Text('Not a Member?',style: TextStyle(fontWeight: FontWeight.bold,),),
                     GestureDetector(
                       onTap: widget.showRegisterPage,
-                      child: Text('Register now', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold,
+                      child: const Text('Register now', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold,
                       ),
                       ),
                     ),

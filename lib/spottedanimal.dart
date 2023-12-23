@@ -29,17 +29,60 @@ class _AnimalSpottedPageState extends State<AnimalSpottedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Animals Spotted',style: GoogleFonts.andika(),),
-        actions: [
-          ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalSpottingPage(),),);
+        title:  Stack(
+          children: <Widget>[
+            Container(
+              height: 55.0,
 
-          }, child: Row(
-            children: [
-              Icon(Icons.add),
-              Text('Add')
-            ],
-          ),)
-        ],
+              decoration:   BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+
+
+
+                  )
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0,left: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 5,),
+                  GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: const Text(
+                      'My Tools',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                      onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalSpottingPage(),),);},
+
+                      child: Container(
+                        decoration:  BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20)
+                        ),
+                          child: const Icon(Icons.add))),
+                  const SizedBox(width: 5,),
+                ],
+              ),
+
+
+            ),
+
+
+          ],
+        ),
+
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('animalspotted').snapshots(),

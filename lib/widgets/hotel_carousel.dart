@@ -127,27 +127,7 @@ class _HotelCarouselState extends State<HotelCarousel> {
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Top Hotels',
-              style: GoogleFonts.dmSerifDisplay(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            GestureDetector(
-              //   onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => CarSearch()));},
-              child: Row(
-                children: [
-                  Text(
-                    'See All',
-                    style: GoogleFonts.dmSerifDisplay(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
-                  ),
-                  Icon(Icons.chevron_right,color: Theme.of(context).primaryColor,)
-                ],
-              ),
-            ),
-          ],
-        ),
+
         Expanded(
          
           child: StreamBuilder<QuerySnapshot>(
@@ -173,9 +153,16 @@ class _HotelCarouselState extends State<HotelCarousel> {
                 );
               }
 
-              return ListView(
+              return GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Number of columns
+                  crossAxisSpacing: 2.0,
+                  mainAxisSpacing: 2.0,
+                ),
                 scrollDirection: Axis.vertical,
-                children: snapshot.data!.docs.map((document) {
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final document = snapshot.data!.docs[index];
                   final name = document.get('name');
                   final price = document.get('price');
                   final address = document.get('address');
@@ -187,14 +174,7 @@ class _HotelCarouselState extends State<HotelCarousel> {
 
                   final hotelId = document.get('id');
                   final user = FirebaseAuth.instance.currentUser;// <-- Get the hotel ID
-
-
-
                   bool _isLoading = false;
-
-
-
-
 
 
                   return  Padding(
@@ -239,7 +219,7 @@ class _HotelCarouselState extends State<HotelCarousel> {
 
                       child: Container(
 
-                        width: 280,
+                        // width: 280,
 
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -251,7 +231,7 @@ class _HotelCarouselState extends State<HotelCarousel> {
 
 
 
-                              height: 160,
+                              height: 130,
 
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
@@ -277,7 +257,7 @@ class _HotelCarouselState extends State<HotelCarousel> {
                                     ),
 
 
-                                    width: 300,
+                                    //  width: 300,
                                     height: 160,
                                   ),
                                   Positioned(
@@ -335,13 +315,16 @@ class _HotelCarouselState extends State<HotelCarousel> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 13.0,right: 13.0),
+                              padding: const EdgeInsets.only(left: 5.0,right: 5.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    '$name',
-                                    style: GoogleFonts.dmSerifDisplay(fontSize: 18,   color: Colors.black),
+                                  Container(
+                                    width: 140,
+                                    child: Text(
+                                      '$name',
+                                      style: GoogleFonts.dmSerifDisplay(fontSize: 18,color: Colors.black,),overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
 
                                   Row(
@@ -392,7 +375,8 @@ class _HotelCarouselState extends State<HotelCarousel> {
                       ),
                     ),
                   );
-                }).toList(),
+                },
+
               );
             },
           ),
@@ -433,7 +417,7 @@ class _TDState extends State<TD> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Center(
+                return const Center(
                   child: Text('An error occurred while loading the data.'),
                 );
               }
@@ -445,94 +429,100 @@ class _TDState extends State<TD> {
               }
 
               if (snapshot.data!.docs.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text('No  details found.'),
                 );
               }
 
-              return ListView(
-                scrollDirection: Axis.vertical,
-                children: snapshot.data!.docs.map((document) {
-                  final name = document.get('name');
+              return GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+               crossAxisCount: 2, // Number of columns
+               crossAxisSpacing: 2.0,
+               mainAxisSpacing: 2.0,
+                            ),
+                   scrollDirection: Axis.vertical,
+                itemCount: snapshot.data!.docs.length,
+                   itemBuilder: (BuildContext context, int index) {
+                     final document = snapshot.data!.docs[index];
+                     final name = document.get('name');
 
-                  final address = document.get('address');
-
-
-
-                  final imageurl = document.get('imageurl');
-
-
-                  final hotelId = document.get('id');
-                  final user = FirebaseAuth.instance.currentUser;// <-- Get the hotel ID
-
-
-
-                  bool _isLoading = false;
+                     final address = document.get('address');
 
 
 
+                     final imageurl = document.get('imageurl');
+
+
+                     final hotelId = document.get('id');
+                     final user = FirebaseAuth.instance.currentUser;// <-- Get the hotel ID
 
 
 
-                  return  GestureDetector(
-                    onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreen(document),),);},
+                     bool _isLoading = false;
 
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                       decoration: BoxDecoration(
+
+
+              return  GestureDetector(
+                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreen(document),),);},
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
                       //   border: Border.all( color: Colors.red,)
-                       ),
-                        padding: EdgeInsets.only(right: 6.0),
+                    ),
+                    padding: const EdgeInsets.only(right: 6.0),
 
 
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 140,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+               borderRadius: BorderRadius.circular(60),
+               image: DecorationImage(image: AssetImage('$imageurl'))
+                          ),
+                        ),
+
+                        Text(
+                          '$name',
+                          style: GoogleFonts.dmSerifDisplay(fontSize: 18,   color: Colors.black),maxLines: 1,
+                        ),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                        height: 200,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(60),
-                                image: DecorationImage(image: AssetImage('$imageurl'))
-                              ),
-                            ),
-
                             Text(
-                              '$name',
-                              style: GoogleFonts.dmSerifDisplay(fontSize: 18,   color: Colors.black),maxLines: 1,
+               '$address',
+               style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor,),
                             ),
-                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '$address',
-                                  style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor,),
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(Icons.star,color: Colors.yellow,size: 15,),
-                                    Text(
-                                      '4.0',
-                                      style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
-                                    ),
-                                    Text(
-                                      ' (120+)',
-                                      style: GoogleFonts.dmSerifDisplay(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey[600]),
-                                    ),
-                                  ],
-                                ),
+                            Row(
+               children: [
+                 const Icon(Icons.star,color: Colors.yellow,size: 15,),
+                 Text(
+                   '4.0',
+                   style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                 ),
+                 Text(
+                   ' (120+)',
+                   style: GoogleFonts.dmSerifDisplay(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                 ),
+               ],
+                            ),
 
-                              ],
-                            ),
                           ],
                         ),
-                       // width: 250,
-                      ),
+                      ],
                     ),
-                  );
-                }).toList(),
+                    // width: 250,
+                  ),
+                ),
               );
+
+                   },
+
+                 );
             },
           ),
         ),

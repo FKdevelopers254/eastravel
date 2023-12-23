@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
@@ -101,7 +102,56 @@ class _AnimalSpottingPageState extends State<AnimalSpottingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Spotted Animal',style: GoogleFonts.andika(),),
+        title: Stack(
+          children: <Widget>[
+            Container(
+              height: 55.0,
+
+              decoration:   BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+
+
+
+                  )
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0,left: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 5,),
+                  GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: const Text(
+                      'Add Spotted Animal',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                      onTap: () {
+
+                      },
+                      child: Lottie.asset('assets/icons/64705-elephant.json',height: 50,)),
+
+                  const SizedBox(width: 5,),
+                ],
+              ),
+
+
+            ),
+
+
+          ],
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -147,7 +197,7 @@ class _AnimalSpottingPageState extends State<AnimalSpottingPage> {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Container(
@@ -164,7 +214,7 @@ class _AnimalSpottingPageState extends State<AnimalSpottingPage> {
                     decoration: InputDecoration(
                       hintText: 'Select date',
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.calendar_today),
+                        icon: const Icon(Icons.calendar_today),
                         onPressed: () async {
                           final selectedDate = await showDatePicker(
                             context: context,

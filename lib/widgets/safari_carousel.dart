@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eastravel/widgets/safari_tab.dart';
-import 'package:eastravel/widgets/safaridata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 
 
 
@@ -246,13 +243,14 @@ class _SafariCarouselState extends State<SafariCarousel> {
                                             } else {
                                               return GestureDetector(
 
+                                                onTap:_isLoading
+                                                    ? null // Disable the button while loading
+                                                    : () => _djfollowers(hotelId, context),
+
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
                                                   child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),
                                                 ),
-                                                onTap:_isLoading
-                                                    ? null // Disable the button while loading
-                                                    : () => _djfollowers(hotelId, context),
                                               );
                                             }
                                         }

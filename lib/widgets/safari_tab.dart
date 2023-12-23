@@ -263,7 +263,7 @@ class _SafariTabState extends State<SafariTab> {
                   direction: Axis.horizontal,
                   allowHalfRating: true,
                   itemCount: 5,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                   itemBuilder: (context, _) => const Icon(
                     Icons.star,
                     color: Colors.amber,
@@ -593,7 +593,7 @@ class SafariDetailScreen extends StatelessWidget  {
   Widget build(BuildContext context) {
     return Scaffold(
       body:  DefaultTabController(
-        length: 1,
+        length: 2,
         child: CustomScrollView(
 
           physics: const BouncingScrollPhysics(
@@ -661,7 +661,7 @@ class SafariDetailScreen extends StatelessWidget  {
 
             SliverPersistentHeader(
               delegate: _SliverAppBarDelegate(
-                TabBar(
+                const TabBar(
                   tabs: [
                     Tab(text: 'Safari Details'),
 
@@ -688,10 +688,42 @@ class SafariDetailScreen extends StatelessWidget  {
                     
                               child: Column(
                                 children: [
-                    
 
-                    
-                                  Text('Inclusives'),
+
+
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+
+
+
+
+
+                                        const Text(
+                                          'Inclusives',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1.5,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          // onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => HotelTab(),),);},
+                                          child: Text(
+                                            'Available',
+                                            style: TextStyle(
+                                              color: Theme.of(context).primaryColor,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 1.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                   StreamBuilder<QuerySnapshot>(
                                     stream: FirebaseFirestore.instance
                                         .collection('safariamenities')
@@ -700,7 +732,7 @@ class SafariDetailScreen extends StatelessWidget  {
                                         .snapshots(),
                                     builder: (context, snapshot) {
                                       if (!snapshot.hasData) {
-                                        return CircularProgressIndicator();
+                                        return const CircularProgressIndicator();
                                       }
                                       if (snapshot.data!.docs.isEmpty) {
                                         return Text('No data');
@@ -717,7 +749,7 @@ class SafariDetailScreen extends StatelessWidget  {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              SizedBox(width: 30,),
+                                              const SizedBox(width: 30,),
                                               Row(
                                                 children: [
                                                   Icon(
@@ -725,7 +757,7 @@ class SafariDetailScreen extends StatelessWidget  {
                                                     size: 21.0,
                                                     color: wifi ? Colors.green : Colors.red,
                                                   ),
-                                                  SizedBox(width: 10,),
+                                                  const SizedBox(width: 10,),
                                                   const Text(
                                                     'Park Entrance',
                                                     style: TextStyle(
@@ -736,7 +768,7 @@ class SafariDetailScreen extends StatelessWidget  {
                     
                                                 ],
                                               ),
-                                              SizedBox(width: 30,),
+                                              const SizedBox(width: 30,),
                                               Row(
                                                 children: [
                                                   Icon(
@@ -744,7 +776,7 @@ class SafariDetailScreen extends StatelessWidget  {
                                                     size: 21.0,
                                                     color: spa ? Colors.green : Colors.red,
                                                   ),
-                                                  SizedBox(width: 10,),
+                                                  const SizedBox(width: 10,),
                                                   const Text(
                                                     'Tourism Insurance',
                                                     style: TextStyle(
@@ -815,9 +847,7 @@ class SafariDetailScreen extends StatelessWidget  {
                                     },
                                   )
                     
-                    
-                    
-                    
+
                                 ],
                               ),
                             ),
@@ -837,7 +867,7 @@ class SafariDetailScreen extends StatelessWidget  {
                               const Text(
                                 'Tour Package',
                                 style: TextStyle(
-                                  fontSize: 22.0,
+                                  fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.5,
                                 ),
@@ -914,7 +944,7 @@ class SafariDetailScreen extends StatelessWidget  {
                                     _buildRatingStars(5),
                                     Row(
                                       children: [
-                                        const Icon(Icons.tour_outlined,size: 15,),
+                                        const Icon(Icons.pin_drop,size: 15,),
                                         Text(
                                           documentt['location'],
                                           style: const TextStyle(
@@ -929,11 +959,11 @@ class SafariDetailScreen extends StatelessWidget  {
                                     ),
                                     Wrap(
                                       children: [
-                                        const Icon(Icons.tour_outlined,size: 15,),
+                                        const Icon(Icons.hotel,size: 15,),
                                         Text(
                                           documentt['hotelname'],
-                                          style: const TextStyle(
-                                              color: Colors.grey,
+                                          style:  TextStyle(
+                                              color: Colors.grey.shade900,
                                               fontSize: 12
                     
                                           ),
@@ -948,29 +978,23 @@ class SafariDetailScreen extends StatelessWidget  {
                                           documentt['days'],
                                           style: const TextStyle(
                                             fontSize: 15.0,
+                                            color: Colors.grey,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        const Text(
-                                          '/Days',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
+                                        const Icon(Icons.sunny,size: 15,color: Colors.yellow,),
+
                                         SizedBox(width: 10,),
                                         Text(
-                                          documentt['days'],
+                                          documentt['days'] ,
                                           style: const TextStyle(
                                             fontSize: 15.0,
+                                            color: Colors.grey,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        const Text(
-                                          '/Nights',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
+                                        const Icon(Icons.dark_mode,size: 15,color: Colors.black,),
+
                                       ],
                                     ),
                     
@@ -1033,7 +1057,7 @@ class SafariDetailScreen extends StatelessWidget  {
                                                                 Navigator.of(context).pop();
                     
                                                                 ScaffoldMessenger.of(context).showSnackBar(
-                                                                  SnackBar(
+                                                                  const SnackBar(
                                                                     backgroundColor: Colors.green,
                                                                     content: Text('Message sent successfully'),
                                                                     duration: Duration(seconds: 3),
@@ -1104,167 +1128,169 @@ class SafariDetailScreen extends StatelessWidget  {
                   //Book Safari
 
 
-                  ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            const Text(
-                              'Itinerary',
-                              style: TextStyle(
-                                fontSize: 22.0,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.5,
-                              ),
-                            ),
-                            GestureDetector(
-                              // onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => HotelTab(),),);},
-                              child: Text(
-                                ' ',
+                  Container(
+                    child: ListView(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              const Text(
+                                'Itinerary',
                                 style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1.0,
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                              GestureDetector(
+                                // onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => HotelTab(),),);},
+                                child: Text(
+                                  ' ',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 1.0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Stack(
+                          children: <Widget>[
+                            Container(
+
+
+
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(100.0, 20.0, 20.0, 20.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 190.0,
+                                          child: Text(
+                                            documentt['description'],
+                                            style: const TextStyle(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2000,
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+
+
+
+
+                                  ],
                                 ),
                               ),
                             ),
+
                           ],
                         ),
-                      ),
-                      Stack(
-                        children: <Widget>[
-                          Container(
 
 
 
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(100.0, 20.0, 20.0, 20.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 190.0,
-                                        child: Text(
-                                          documentt['description'],
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2000,
+                        //Safari days
+                        FutureBuilder<QuerySnapshot>(
+                          future: FirebaseFirestore.instance.collection('safaridays').where('id', isEqualTo: documentt['id']).orderBy('desc').get(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            }
+                            final roomDocs = snapshot.data!.docs;
+                            if (roomDocs.isEmpty) {
+                              return Text('No days found for this Safari'+ documentt['id']);
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: roomDocs.length,
+                              itemBuilder: (context, index) {
+                                final roomDoc = roomDocs[index];
+
+                                return Stack(
+                                  children: <Widget>[
+                                    Container(
+                                    //  margin: const EdgeInsets.fromLTRB(40.0, 5.0, 20.0, 5.0),
+
+
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+                                        child: Column(
+
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Wrap(
+                                              children: [
+                                                Text(
+                                                  roomDoc['dayname'],
+                                                  style:  GoogleFonts.abrilFatface(
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  maxLines: 4,
+                                                ),
+                                              ],
+                                            ),
+
+                                            Wrap(
+                                              children: [
+                                                const Icon(Icons.hotel,size: 15,),
+                                                Text(
+                                                  roomDoc['desc'],
+                                                  style: const TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 12
+
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  maxLines: 60,
+                                                ),
+                                              ],
+                                            ),
+
+                                            const SizedBox(height: 10.0),
+
+                                          ],
                                         ),
                                       ),
-
-                                    ],
-                                  ),
-
-
-
-
-                                ],
-                              ),
-                            ),
-                          ),
-
-                        ],
-                      ),
-
-
-
-                      //Safari days
-                      FutureBuilder<QuerySnapshot>(
-                        future: FirebaseFirestore.instance.collection('safaridays').where('id', isEqualTo: documentt['id']).orderBy('desc').get(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          }
-                          if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          }
-                          final roomDocs = snapshot.data!.docs;
-                          if (roomDocs.isEmpty) {
-                            return Text('No days found for this Safari'+ documentt['id']);
-                          }
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: roomDocs.length,
-                            itemBuilder: (context, index) {
-                              final roomDoc = roomDocs[index];
-
-                              return Stack(
-                                children: <Widget>[
-                                  Container(
-                                  //  margin: const EdgeInsets.fromLTRB(40.0, 5.0, 20.0, 5.0),
-
-
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-                                      child: Column(
 
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Wrap(
-                                            children: [
-                                              Text(
-                                                roomDoc['dayname'],
-                                                style:  GoogleFonts.abrilFatface(
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 4,
-                                              ),
-                                            ],
-                                          ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
 
-                                          Wrap(
-                                            children: [
-                                              const Icon(Icons.hotel,size: 15,),
-                                              Text(
-                                                roomDoc['desc'],
-                                                style: const TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 12
-
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 60,
-                                              ),
-                                            ],
-                                          ),
-
-                                          const SizedBox(height: 10.0),
-
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-
-                    ],
+                      ],
+                    ),
                   ),
 
 
@@ -1542,6 +1568,16 @@ class _SaState extends State<Sa> {
 
 
 
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        color: Colors.blueAccent.withOpacity(0.6)
+                                                    ),
+
+
+
+
+
+
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                       children: [
@@ -1675,10 +1711,6 @@ class _SaState extends State<Sa> {
 
                                                       ],
                                                     ),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(10),
-                                                        color: Colors.blueAccent.withOpacity(0.6)
-                                                    ),
                                                   ),
 
 
@@ -1731,7 +1763,7 @@ class _SaState extends State<Sa> {
                                               color: wifi ? Colors.green : Colors.red,
                                             ),
                                             SizedBox(width: 10,),
-                                            Text(
+                                            const Text(
                                               'Park Entrance',
                                               style: TextStyle(
                                                 color: Colors.black,
@@ -1750,7 +1782,7 @@ class _SaState extends State<Sa> {
                                               color: spa ? Colors.green : Colors.red,
                                             ),
                                             SizedBox(width: 10,),
-                                            Text(
+                                            const Text(
                                               'Tourism Insurance',
                                               style: TextStyle(
                                                 color: Colors.black,
@@ -1765,7 +1797,7 @@ class _SaState extends State<Sa> {
 
                                       ],
                                     ),
-                                    SizedBox(height: 10,),
+                                    const SizedBox(height: 10,),
                                     Center(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1779,7 +1811,7 @@ class _SaState extends State<Sa> {
                                                 size: 21.0,
                                                 color: pool ? Colors.green : Colors.red,
                                               ),
-                                              Text(
+                                              const Text(
                                                 'Unlimited Game Drives',
                                                 style: TextStyle(
                                                   color: Colors.black,
@@ -1798,7 +1830,7 @@ class _SaState extends State<Sa> {
                                                 size: 21.0,
                                                 color: drinks ? Colors.green : Colors.red,
                                               ),
-                                              Text(
+                                              const Text(
                                                 'Drinks',
                                                 style: TextStyle(
                                                   color: Colors.black,

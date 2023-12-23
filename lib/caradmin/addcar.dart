@@ -1,8 +1,10 @@
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 import 'homepage.dart';
 
@@ -195,7 +197,70 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      appBar: AppBar(
+        title:  Stack(
+          children: <Widget>[
+            Container(
+              height: 55.0,
+
+              decoration:   BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+
+
+
+                  )
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                GestureDetector(
+
+
+                  child:  GestureDetector(
+                    onLongPress: (){FirebaseAuth.instance.signOut();},
+                    // onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
+                    //  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedTextKit(
+                          animatedTexts: [
+
+                            // TyperAnimatedText(user.email!,textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 17)),
+                            TyperAnimatedText('Add Car',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)),
+
+
+                          ],
+                          pause: const Duration(milliseconds: 5000),
+
+                          stopPauseOnTap: true,
+                          repeatForever: true,
+                        ),
+
+                        // child:  Text('EAS SAFARIS',style: GoogleFonts.sassyFrass(fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)
+                        //),
+                      ],
+                    ),
+                  ),
+                  // onTap: Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreen())),
+                ),
+
+                Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                  child: GestureDetector(
+                    onTap: (){FirebaseAuth.instance.signOut();},
+                    // onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const BirdApp()));},
+                    child:
+                    Lottie.asset('assets/icons/90770-traveller.json',height: 50,),
+                  ),)
+
+              ],),
+            ),
+          ],
+        ),
+      ),
+
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -203,21 +268,9 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                //greetings
-                Text('Add Car ',
-                  style: GoogleFonts.bebasNeue(
-                    fontSize: 52,
 
-                  ),
-                ),
-                const SizedBox(height: 10,),
-                const Text('EAS SAFARIS',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),),
-                const SizedBox(height: 30,),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -786,7 +839,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Register',
+                          'Add Car',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

@@ -51,20 +51,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
           const TravelP(),
-          TD(),
+          const TD(),
           //  DestinationCarousel(),
 
 
 
 
-          HotelCarousel(),
+          const HotelCarousel(),
 
 
 
 
-          SafariCarousel(),
+          const SafariCarousel(),
 
-          CarCarousel(),
+          const CarCarousel(),
 
 
           PlaceCarousel(),
@@ -152,7 +152,7 @@ class _NewHomeState extends State<NewHome> with SingleTickerProviderStateMixin {
 
                 decoration:   BoxDecoration(
                     color: Theme.of(context).primaryColor.withOpacity(0.8),
-                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+                    borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
 
 
 
@@ -165,37 +165,34 @@ class _NewHomeState extends State<NewHome> with SingleTickerProviderStateMixin {
                   GestureDetector(
 
 
-                    child:  Container(
+                    child:  GestureDetector(
+                      onLongPress: (){FirebaseAuth.instance.signOut();},
+                      // onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
+                      //  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedTextKit(
+                            animatedTexts: [
 
-                      child: GestureDetector(
-                        onLongPress: (){FirebaseAuth.instance.signOut();},
-                        // onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
-                        //  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>  PaymentPage()));},
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AnimatedTextKit(
-                              animatedTexts: [
+                             // TyperAnimatedText(user.email!,textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 17)),
+                              TyperAnimatedText('EAS SAFARIS',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)),
+                              TyperAnimatedText('Book Hotels',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 22)),
 
-                               // TyperAnimatedText(user.email!,textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 17)),
-                                TyperAnimatedText('EAS SAFARIS',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)),
-                                TyperAnimatedText('Book Hotels',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 22)),
-
-                                TyperAnimatedText('Book Travels',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 22)),
-                                TyperAnimatedText('Car Hire',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 22)),
+                              TyperAnimatedText('Book Travels',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 22)),
+                              TyperAnimatedText('Car Hire',textStyle: GoogleFonts.abrilFatface(color:Colors.white,fontWeight: FontWeight.bold,fontSize: 22)),
 
 
-                              ],
-                              pause: const Duration(milliseconds: 5000),
+                            ],
+                            pause: const Duration(milliseconds: 5000),
 
-                              stopPauseOnTap: true,
-                              repeatForever: true,
-                            ),
+                            stopPauseOnTap: true,
+                            repeatForever: true,
+                          ),
 
-                            // child:  Text('EAS SAFARIS',style: GoogleFonts.sassyFrass(fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)
-                            //),
-                          ],
-                        ),
+                          // child:  Text('EAS SAFARIS',style: GoogleFonts.sassyFrass(fontWeight: FontWeight.bold,fontSize: 28,letterSpacing: 1.5)
+                          //),
+                        ],
                       ),
                     ),
                     // onTap: Navigator.push(context, MaterialPageRoute(builder: (context) => PostScreen())),
@@ -206,19 +203,12 @@ class _NewHomeState extends State<NewHome> with SingleTickerProviderStateMixin {
                       onTap: (){FirebaseAuth.instance.signOut();},
                       // onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const BirdApp()));},
                       child:
-
-
-
-
-
-                      Lottie.asset('assets/icons/96833-login.json',height: 50,),
+    Lottie.asset('assets/icons/96833-login.json',height: 50,),
                     ),)
 
                 ],),
               ),
-
-
-            ],
+  ],
           ),
           TabBar(
             controller: tabController,
@@ -226,8 +216,8 @@ class _NewHomeState extends State<NewHome> with SingleTickerProviderStateMixin {
             indicatorSize: TabBarIndicatorSize.label,
             indicatorWeight: 4.0,
             isScrollable: true,
-            labelColor: Color(0xFF440206),
-            unselectedLabelColor: Color(0xFF440206),
+            labelColor: const Color(0xFF440206),
+            unselectedLabelColor: const Color(0xFF440206),
             tabs: const [
 
               Tab(
@@ -298,16 +288,16 @@ class _NewHomeState extends State<NewHome> with SingleTickerProviderStateMixin {
 
 
 
-                TD(),
+                const TD(),
 
-                HotelCarousel(),
-
-
+                const HotelCarousel(),
 
 
-                SafariCarousel(),
 
-                CarCarousel(),
+
+                const SafariCarousel(),
+
+                const CarCarousel(),
 
 
 
