@@ -273,7 +273,7 @@ class RatingState extends ChangeNotifier {
     final QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('ratings')
         .where('destination_id', isEqualTo: destinationId)
-        .where('email', isEqualTo: userEmail) // Filter by user's email
+     //   .where('email', isEqualTo: userEmail) // Filter by user's email
         .get();
 
     int totalRating = 0;
