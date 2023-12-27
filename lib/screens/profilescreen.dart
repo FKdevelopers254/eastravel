@@ -1615,149 +1615,54 @@ class UserBadgesPage extends StatelessWidget {
           if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
             return Center(child: Text('No badges found for $name'));
           }
-          final fem=0.9;
-          final ffem=0.9;
 
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+          final fem = 0.9;
+          final ffem = 0.9;
+
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              DocumentSnapshot document = snapshot.data!.docs[index];
               Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
               return Container(
                 // estatescardhorizontalfullVD2 (2:3991)
-                margin:  EdgeInsets.fromLTRB(11, 0, 0, 10),
-                padding:  EdgeInsets.fromLTRB(8, 8, 60, 8),
-                width:  double.infinity,
-                height:  156,
-                decoration:  BoxDecoration (
-                  color:  Color(0xfff5f4f7),
-                  borderRadius:  BorderRadius.circular(25),
+                margin: EdgeInsets.fromLTRB(11, 0, 0, 10),
+                width: double.infinity,
+                height: 76,
+                decoration: BoxDecoration(
+                  color: Color(0xfff5f4f7),
+                  borderRadius: BorderRadius.circular(25),
                 ),
-                child:
-                Row(
-                  crossAxisAlignment:  CrossAxisAlignment.center,
-                  children:  [
-                    Container(
-                      // shapei5n (I2:3991;344:2737)
-                      margin:  EdgeInsets.fromLTRB(0, 0, 16, 0),
-                      padding:  EdgeInsets.fromLTRB(8, 8, 8, 8),
-                      width:  128,
-                      height:  double.infinity,
-                      decoration:  BoxDecoration (
-                        color:  Color(0x14884af6),
-                        borderRadius:  BorderRadius.circular(18),
-                        image:  DecorationImage (
-                          fit:  BoxFit.cover,
-                          image:  AssetImage (
-                              'assets/images/gondola.jpg'
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 8.5 * fem),
+                          child: Text(
+                            data['data'], // Assuming 'data' field exists in Firestore
+                            style: GoogleFonts.lato(
+                              fontSize: 12 * ffem,
+                              fontWeight: FontWeight.w700,
+                              height: 1.5 * ffem / fem,
+                              letterSpacing: 0.36 * fem,
+                              color: Color(0xff252b5c),
+                            ),
                           ),
                         ),
-                      ),
-                      child:
-                      Column(
-                        crossAxisAlignment:  CrossAxisAlignment.start,
-                        children:  [
-                          Container(
-                            // component8vhe (I2:3991;344:2740)
-                            margin:  EdgeInsets.fromLTRB(0, 0, 0, 75),
-                            width:  25,
-                            height:  25,
-                            child:
-                            Image.network(
-                              '[Image url]',
-                              width:  25,
-                              height:  25,
-                            ),
-                          ),
-                          ClipRect(
-                            // buttoncategorysquaretextsmallP (I2:3991;344:2739)
-                            child:
-                            BackdropFilter(
-                              filter:  ImageFilter.blur (
-                                sigmaX:  4,
-                                sigmaY:  4,
-                              ),
-                              child:
-                              Container(
-                                padding:  EdgeInsets.fromLTRB(7, 7, 6, 4),
-                                width:  90,
-                                height:  24,
-                                decoration:  BoxDecoration (
-                                  color:  Color(0xaf1f4c6b),
-                                  borderRadius:  BorderRadius.circular(8),
-                                ),
-                                child:
-                                Container(
-                                  // layoutxnk (I2:3991;344:2739;251:539)
-                                  width:  double.infinity,
-                                  height:  double.infinity,
-                                  child:
-                                  Text(
-                                    '$name',
-                                    style:  GoogleFonts.lato (
-
-                                      fontSize:  8,
-                                      fontWeight:  FontWeight.w500,
-                                      height:  1.2,
-                                      letterSpacing:  0.24,
-                                      color:  Color(0xfff5f4f7),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      // autogroupn2redtt (US8BknLiwQPy7qUcWBn2RE)
-                      margin:  EdgeInsets.fromLTRB(0, 8, 0, 12),
-                      width:  110,
-                      height:  double.infinity,
-                      child:
-                      Column(
-                        crossAxisAlignment:  CrossAxisAlignment.start,
-                        children:  [
-                          Container(
-                            // layoutWxg (I2:3991;344:2744)
-                            margin:  EdgeInsets.fromLTRB(0, 0, 0, 47),
-                            width:  double.infinity,
-                            child:
-                            Column(
-                              crossAxisAlignment:  CrossAxisAlignment.start,
-                              children:  [
-
-                                Container(
-
-                                  // text2RE (I2:3991;344:2745)
-                                  margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 8.5*fem),
-                                  child:
-                                  Text(
-                                    data['data'],
-                                    style:  GoogleFonts.lato (
-
-                                      fontSize:  12*ffem,
-                                      fontWeight:  FontWeight.w700,
-                                      height:  1.5*ffem/fem,
-                                      letterSpacing:  0.36*fem,
-                                      color:  Color(0xff252b5c),
-                                    ),
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ),
-
-                        ],
-                      ),
+                      ],
                     ),
                   ],
                 ),
               );
-            }).toList(),
+            },
           );
         },
       ),
+
     );
   }
 }
@@ -1785,11 +1690,17 @@ class WeatherData {
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     return WeatherData(
       location: json['location']['name'],
+
       temp: double.parse(json['current']['temp_c'].toString()),
+
       condition: json['current']['condition']['text'],
+
       humidity: int.parse(json['current']['humidity'].toString()),
+
       precipitation: double.parse(json['current']['precip_mm'].toString()),
+
       wind: double.parse(json['current']['wind_kph'].toString()),
+
     );
   }
 

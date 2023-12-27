@@ -79,7 +79,8 @@ class _CarTabState extends State<CarTab> {
 
     bool _isLoading = false;
 
-    void _wishlistHotel(String hotelId, BuildContext context) async {
+
+    void _djfollowers(String hotelId, BuildContext context) async {
       // Set the loading state to true
       setState(() {
         _isLoading = true;
@@ -101,16 +102,21 @@ class _CarTabState extends State<CarTab> {
       final QuerySnapshot wishlistSnapshot = await FirebaseFirestore.instance
           .collection('wishlistcars')
           .where('email', isEqualTo: email)
-          .where('name', isEqualTo: snapshot['name'])
+          .where('id', isEqualTo: hotelId)
           .get();
       final isWishlisted = wishlistSnapshot.docs.isNotEmpty;
       if (isWishlisted) {
         // Hotel is already in the wishlist, show a snackbar and return
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
 
-            content: Text('Car is already in wishlist!'),
-            backgroundColor: Colors.red,
+        ScaffoldMessenger.of(context).showSnackBar(
+
+
+
+          SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: Text('failed'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -121,24 +127,24 @@ class _CarTabState extends State<CarTab> {
         return;
       }
 
-      // Add the hotel data to the wishlisthotels collection
-      await FirebaseFirestore.instance.collection('wishlistcars').add({
+      // Add the hotel data to   the wishlisthotels collection
+      await FirebaseFirestore.instance.collection('wishlistcars').doc(hotelId).set({
         'email': email,
-        'name': snapshot['name'],
-        'address': snapshot['address'],
-        'price': snapshot['price'],
-        'imageurl': snapshot['imageurl'],
+
+
         'id': hotelId,
       });
 
       // Show a snackbar to the user
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-
-          content: Text('Car added to wishlist!'),
-          backgroundColor: Colors.green,
+        SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: Text('Success'),
           duration: Duration(seconds: 2),
         ),
+
       );
 
       // Set the loading state back to false
@@ -146,6 +152,16 @@ class _CarTabState extends State<CarTab> {
         _isLoading = false;
       });
     }
+
+    void deleteHotel(String hotelId) {
+      FirebaseFirestore.instance
+          .collection('wishlistcars')
+          .doc(hotelId)
+          .delete()
+          .then((value) => print('Unfollowed'))
+          .catchError((error) => print('Failed to delete car: $error'));
+    }
+
 
 
     return InkWell(
@@ -412,8 +428,9 @@ class _CarTabState extends State<CarTab> {
 
 
 
+
             Positioned(
-              top: 10.0,
+              top: 1.0,
               left: 10.0,
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection('wishlistcars')
@@ -430,46 +447,29 @@ class _CarTabState extends State<CarTab> {
                       return CircularProgressIndicator();
                     default:
                       if (snapshot.data!.docs.isNotEmpty) {
-                        return Container(
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 2.0,right: 2),
+                          child: GestureDetector(
 
-
-                          child: Icon(Icons.favorite,color: Theme.of(context).primaryColor,size: 30,),
+                            onTap:_isLoading
+                                ? null // Disable the button while loading
+                                : () => deleteHotel(hotelId),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.favorite_outlined,color: Theme.of(context).primaryColor,size: 30,),
+                            ),
+                          ),
                         );
                       } else {
-                        return Container(
-                          height: 30,
+                        return GestureDetector(
 
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(26),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),
                           ),
-
-                          child: Row(
-                            children: [
-
-                              GestureDetector(
-                                  onTap: _isLoading
-                                      ? null // Disable the button while loading
-                                      : () => _wishlistHotel(hotelId, context),
-                                  child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),),
-
-
-
-                              if (_isLoading)
-                                Positioned.fill(
-                                  child: Container(
-                                    color: Theme.of(context).primaryColor.withOpacity(0.5),
-                                    child: Center(
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-
-                            ],
-                          ),
+                          onTap:_isLoading
+                              ? null // Disable the button while loading
+                              : () => _djfollowers(hotelId, context),
                         );
                       }
                   }

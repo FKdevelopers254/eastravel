@@ -41,13 +41,13 @@ class _CarCarouselState extends State<CarCarousel> {
 
       // Get the hotel data using its ID
       final DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('hotels')
+          .collection('cars')
           .doc(hotelId)
           .get();
 
       // Check if the hotel is already in the user's wishlist
       final QuerySnapshot wishlistSnapshot = await FirebaseFirestore.instance
-          .collection('wishlisthotels')
+          .collection('wishlistcars')
           .where('email', isEqualTo: email)
           .where('id', isEqualTo: hotelId)
           .get();
@@ -75,7 +75,7 @@ class _CarCarouselState extends State<CarCarousel> {
       }
 
       // Add the hotel data to   the wishlisthotels collection
-      await FirebaseFirestore.instance.collection('wishlisthotels').doc(hotelId).set({
+      await FirebaseFirestore.instance.collection('wishlistcars').doc(hotelId).set({
         'email': email,
 
 
@@ -233,7 +233,7 @@ return   Padding(
                   top: 1.0,
                   right: 10.0,
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('wishlisthotels')
+                    stream: FirebaseFirestore.instance.collection('wishlistcars')
                         .where('email', isEqualTo: user!.email)
                         .where('id', isEqualTo: hotelId)
                         .snapshots(),

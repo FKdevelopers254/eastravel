@@ -807,6 +807,14 @@ class BadgeScreenn extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30.0,top: 30.0),
+                                child: QrImageView(
+                                  data: '$qrData',
+                                  version: QrVersions.auto,
+                                  size: 170.0,
+                                ),
+                              ),
 
                             ],
                           ),

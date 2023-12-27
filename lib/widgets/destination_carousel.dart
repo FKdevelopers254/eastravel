@@ -11,6 +11,8 @@ import 'package:eastravel/screens/destination_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
+
 
 
 class DestinationCarousel extends StatefulWidget {
@@ -224,7 +226,70 @@ class _DestinationCarouselState extends State<DestinationCarousel> {
     );
   }
 }
+class RatingState extends ChangeNotifier {
+  int _currentRating = 0;
 
+  int get currentRating => _currentRating;
+
+
+  void updateRating(int newRating) {
+    _currentRating = newRating;
+    notifyListeners();
+  }
+
+  Future<void> submitRating(BuildContext context, String destinationId, int rating) async {
+    final CollectionReference ratings = FirebaseFirestore.instance.collection('ratings');
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    // Query for an existing rating with the same user email and destination ID
+    QuerySnapshot existingRatings = await ratings
+        .where('destination_id', isEqualTo: destinationId)
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    // Use a Firestore transaction to either update or add a new rating
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      if (existingRatings.docs.isNotEmpty) {
+        // If a rating exists for the user and destination, update the existing rating
+        DocumentSnapshot ratingSnapshot = existingRatings.docs.first;
+        transaction.update(ratingSnapshot.reference, {'rating': rating});
+      } else {
+        // If no rating exists, create a new document with the provided data
+        await ratings.add({
+          'destination_id': destinationId,
+          'rating': rating,
+          'email': userEmail,
+          // Other data associated with the rating can be added here
+        });
+      }
+    });
+
+    // Update the state with the latest rating
+    updateRating(rating);
+  }
+  Future<void> fetchRatingForDestination(String destinationId) async {
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('ratings')
+        .where('destination_id', isEqualTo: destinationId)
+        .where('email', isEqualTo: userEmail) // Filter by user's email
+        .get();
+
+    int totalRating = 0;
+    int count = 0;
+
+    snapshot.docs.forEach((doc) {
+      totalRating += doc['rating'] as int;
+      count++;
+    });
+
+    if (count > 0) {
+      double averageRating = totalRating / count;
+      updateRating(averageRating.round());
+    }
+  }
+}
 
 class DestinationDetailScreen extends StatelessWidget {
 
@@ -301,155 +366,185 @@ class DestinationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:  DefaultTabController(
-        length: 1,
-        child: CustomScrollView(
-
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          slivers: <Widget>[
-            SliverAppBar(
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
-              pinned: true,
-              stretch: true,
-              onStretchTrigger: () {
-                // Function callback for stretch
-                return Future<void>.value();
-              },
-              expandedHeight: 300.0,
-              shadowColor: Colors.red[100],
-              flexibleSpace: FlexibleSpaceBar(
-                stretchModes: const <StretchMode>[
-                  StretchMode.zoomBackground,
-                  StretchMode.blurBackground,
-                  StretchMode.fadeTitle,
-
-                ],
-                centerTitle: true,
-                title:  AnimatedTextKit(
-                  animatedTexts: [
-                    TyperAnimatedText(document['name'],textStyle: GoogleFonts.bebasNeue(color: Colors.white)),
-
-
-
-                  ],
-                  pause: const Duration(milliseconds: 3000),
-
-                  stopPauseOnTap: true,
-                  repeatForever: true,
-                ),
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    // Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg', fit: BoxFit.cover,),
-
-                    CarouselSlider(
-                      items: [
-                        Image.asset(
-                          document['imageurl'],
-                          fit: BoxFit.cover,
-                        ),
-                        Image.asset(
-                          document['imageurl'],
-                          fit: BoxFit.cover,
-                        ),
-                        Image.asset(
-                          document['imageurl'],
-                          fit: BoxFit.cover,
-                        ),
+    return ChangeNotifierProvider(
+      create: (_) => RatingState(),
+      child: Consumer<RatingState>(
+        builder: (context, ratingState, _) {
+          return Scaffold(
+            body:  DefaultTabController(
+              length: 1,
+              child: CustomScrollView(
+      
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                slivers: <Widget>[
+                  SliverAppBar(
+                    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
+                    pinned: true,
+                    stretch: true,
+                    onStretchTrigger: () {
+                      // Function callback for stretch
+                      return Future<void>.value();
+                    },
+                    expandedHeight: 300.0,
+                    shadowColor: Colors.red[100],
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: const <StretchMode>[
+                        StretchMode.zoomBackground,
+                        StretchMode.blurBackground,
+                        StretchMode.fadeTitle,
+      
                       ],
-                      options: CarouselOptions(
-                        height: 355,
-                        viewportFraction: 1.0,
-                        autoPlay: true,
-                        enlargeCenterPage: false,
+                      centerTitle: true,
+                      title:  AnimatedTextKit(
+                        animatedTexts: [
+                          TyperAnimatedText(document['name'],textStyle: GoogleFonts.bebasNeue(color: Colors.white)),
+      
+      
+      
+                        ],
+                        pause: const Duration(milliseconds: 3000),
+      
+                        stopPauseOnTap: true,
+                        repeatForever: true,
+                      ),
+                      background: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          // Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg', fit: BoxFit.cover,),
+      
+                          CarouselSlider(
+                            items: [
+                              Image.asset(
+                                document['imageurl'],
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                document['imageurl'],
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                document['imageurl'],
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                            options: CarouselOptions(
+                              height: 355,
+                              viewportFraction: 1.0,
+                              autoPlay: true,
+                              enlargeCenterPage: false,
+                            ),
+                          ),
+      
+      
+      
+                        ],
                       ),
                     ),
+                  ),
+      
+      
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      <Widget>[
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+                        Column(
+      
+      
+                          children: [
 
 
 
-                  ],
-                ),
-              ),
-            ),
-
-
-            SliverList(
-              delegate: SliverChildListDelegate(
-                <Widget>[
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  Column(
-
-
-                    children: [
-
-
-
-
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-
-                          child: Text(
-                            document['desc'],
-                            style: GoogleFonts.andika(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w600,
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(5, (index) {
+                                      final int displayIndex = index + 1;
+                                      return IconButton(
+                                        icon: Icon(
+                                          displayIndex <= ratingState.currentRating ? Icons.star : Icons.star_border,
+                                          color: Colors.amber,
+                                        ),
+                                        onPressed: () {
+                                          ratingState.submitRating(context, document.id, displayIndex);
+                                        },
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                // Show the current rating text
+                                Text('Current Rating: ${ratingState.currentRating}'),
+                              ],
                             ),
-                           // overflow: TextOverflow.visible,
-
-                          ),
-                        ),
-                      ),
-
-
-
-
-
-                    ],),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  // ListTiles++
+      
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+      
+                                child: Text(
+                                  document['desc'],
+                                  style: GoogleFonts.andika(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                 // overflow: TextOverflow.visible,
+      
+                                ),
+                              ),
+                            ),
+      
+      
+      
+      
+      
+                          ],),
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+                        // ListTiles++
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
+      
+          );
+        }
       ),
-
     );
   }
 }

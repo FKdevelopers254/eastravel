@@ -136,19 +136,19 @@ class _HotelCarouselState extends State<HotelCarousel> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Center(
+                return const Center(
                   child: Text('An error occurred while loading the data.'),
                 );
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
 
               if (snapshot.data!.docs.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text('No  details found.'),
                 );
               }
@@ -294,13 +294,14 @@ class _HotelCarouselState extends State<HotelCarousel> {
                                             } else {
                                               return GestureDetector(
 
+                                                onTap:_isLoading
+                                                    ? null // Disable the button while loading
+                                                    : () => _djfollowers(hotelId, context),
+
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
                                                   child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),
                                                 ),
-                                                onTap:_isLoading
-                                                    ? null // Disable the button while loading
-                                                    : () => _djfollowers(hotelId, context),
                                               );
                                             }
                                         }
@@ -402,7 +403,101 @@ class _TDState extends State<TD> {
 
 
 
+    bool _isLoading = false;
 
+    void _djfollowers(String hotelId, BuildContext context) async {
+      // Set the loading state to true
+      setState(() {
+        _isLoading = true;
+      });
+      // Get the current user's email and name
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final User? user = auth.currentUser;
+      final String? email = user!.email;
+      // final String email = user?.email ?? 'nashtunic@gmail.com';
+
+
+      // Get the hotel data using its ID
+      final DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('placestovisit')
+          .doc(hotelId)
+          .get();
+
+      // Check if the hotel is already in the user's wishlist
+      final QuerySnapshot wishlistSnapshot = await FirebaseFirestore.instance
+          .collection('wishlistplacestovisit')
+          .where('email', isEqualTo: email)
+          .where('id', isEqualTo: hotelId)
+          .get();
+      final isWishlisted = wishlistSnapshot.docs.isNotEmpty;
+      if (isWishlisted) {
+        // Hotel is already in the wishlist, show a snackbar and return
+
+        ScaffoldMessenger.of(context).showSnackBar(
+
+
+
+          const SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: Text('failed'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        // Set the loading state back to false
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Add the hotel data to   the wishlisthotels collection
+      await FirebaseFirestore.instance.collection('wishlistplacestovisit').doc(hotelId).set({
+        'email': email,
+
+
+        'id': hotelId,
+      });
+
+      // Show a snackbar to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: Text('Success'),
+          duration: Duration(seconds: 2),
+        ),
+
+      );
+
+      // Set the loading state back to false
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
+    void deleteHotel(String hotelId) {
+      FirebaseFirestore.instance
+          .collection('wishlistplacestovisit')
+          .doc(hotelId)
+          .delete()
+          .then((value) => print('Unfollowed'))
+          .catchError((error) => print('Failed to delete car: $error'));
+    }
+
+
+
+    Future<bool> isUserFollowing(String userEmail, String hotelId) async {
+      final QuerySnapshot wishlistSnapshot = await FirebaseFirestore.instance
+          .collection('ishlistplacestovisit')
+          .where('email', isEqualTo: userEmail)
+          .where('id', isEqualTo: hotelId)
+          .get();
+
+      return wishlistSnapshot.docs.isNotEmpty;
+    }
 
 
     return Column(
@@ -423,7 +518,7 @@ class _TDState extends State<TD> {
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
@@ -435,7 +530,7 @@ class _TDState extends State<TD> {
               }
 
               return GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                crossAxisCount: 2, // Number of columns
                crossAxisSpacing: 2.0,
                mainAxisSpacing: 2.0,
@@ -445,23 +540,11 @@ class _TDState extends State<TD> {
                    itemBuilder: (BuildContext context, int index) {
                      final document = snapshot.data!.docs[index];
                      final name = document.get('name');
-
                      final address = document.get('address');
-
-
-
                      final imageurl = document.get('imageurl');
-
-
                      final hotelId = document.get('id');
                      final user = FirebaseAuth.instance.currentUser;// <-- Get the hotel ID
-
-
-
                      bool _isLoading = false;
-
-
-
               return  GestureDetector(
                 onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreen(document),),);},
 
@@ -478,13 +561,69 @@ class _TDState extends State<TD> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 140,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-               borderRadius: BorderRadius.circular(60),
-               image: DecorationImage(image: AssetImage('$imageurl'))
-                          ),
+                        Stack(
+                          children: [
+
+                            Container(
+                              height: 140,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.circular(60),
+                                           image: DecorationImage(image: AssetImage('$imageurl'))
+                              ),
+                            ),
+
+
+                            Positioned(
+                              left: 10.0,
+                              top: 10.0,
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance.collection('wishlistplacestovisit')
+                                    .where('email', isEqualTo: user!.email)
+                                    .where('id', isEqualTo: hotelId)
+                                    .snapshots(),
+                                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  }
+
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return Lottie.asset('assets/icons/135803-loader.json',height: 50,);
+                                    default:
+                                      if (snapshot.data!.docs.isNotEmpty) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(left: 2.0,right: 2),
+                                          child: GestureDetector(
+
+                                            onTap:_isLoading
+                                                ? null // Disable the button while loading
+                                                : () => deleteHotel(hotelId),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Icon(Icons.favorite_outlined,color: Theme.of(context).primaryColor,size: 30,),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return GestureDetector(
+
+                                          onTap:_isLoading
+                                              ? null // Disable the button while loading
+                                              : () => _djfollowers(hotelId, context),
+
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),
+                                          ),
+                                        );
+                                      }
+                                  }
+                                },
+                              ),
+                            ),
+
+                          ],
                         ),
 
                         Text(
@@ -525,6 +664,7 @@ class _TDState extends State<TD> {
                  );
             },
           ),
+
         ),
 
       ],

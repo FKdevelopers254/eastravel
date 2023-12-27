@@ -121,7 +121,7 @@ class _MechanicLocatorState extends State<MechanicLocator> {
 
               decoration:   BoxDecoration(
                   color: Theme.of(context).primaryColor.withOpacity(0.8),
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
+                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(5.0,),bottomLeft: Radius.circular(75.0,),topRight: Radius.circular(75)
 
 
 
@@ -169,7 +169,7 @@ class _MechanicLocatorState extends State<MechanicLocator> {
           children: <Widget>[
 
             if (_permissionStatus.isDenied)
-              Text('Location permission denied. Please enable it in settings.'),
+              const Text('Location permission denied. Please enable it in settings.'),
             ElevatedButton(
               onPressed: () async {
                 if (_permissionStatus.isGranted) {
@@ -181,12 +181,12 @@ class _MechanicLocatorState extends State<MechanicLocator> {
                   requestLocationPermission();
                 }
               },
-              child: Text('Request Location Permission'),
+              child: const Text('Request Location Permission'),
             ),
 
 
 
-            Text(
+            const Text(
               'Closest Mechanics:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),

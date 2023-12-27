@@ -74,31 +74,17 @@ class _HotelTabState extends State<HotelTab> {
     return ListView.builder(
       itemCount: _filteredHotels.length ,
       itemBuilder: (context, index) => _buildItemm(index),
-
-
-
-
-    );
+   );
   }
-
 
   Widget _buildItem(int index) {
     final hotel = _filteredHotels[index];
-
-
     final hotelId = hotel.id;
     final user = FirebaseAuth.instance.currentUser;
     double rating = 2.5;
     final CollectionReference _ratingsRef =
     FirebaseFirestore.instance.collection('ratinghotel');
-
-
-
-
-
-
     bool _isLoading = false;
-
     void _wishlistHotel(String hotelId, BuildContext context) async {
       // Set the loading state to true
       setState(() {
@@ -121,22 +107,21 @@ class _HotelTabState extends State<HotelTab> {
       final QuerySnapshot wishlistSnapshot = await FirebaseFirestore.instance
           .collection('wishlisthotels')
           .where('email', isEqualTo: email)
-          .where('name', isEqualTo: snapshot['name'])
+          .where('id', isEqualTo: hotelId)
           .get();
       final isWishlisted = wishlistSnapshot.docs.isNotEmpty;
       if (isWishlisted) {
         // Hotel is already in the wishlist, show a snackbar and return
 
         ScaffoldMessenger.of(context).showSnackBar(
+
+
+
           SnackBar(
             elevation: 0,
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.transparent,
-            content: AwesomeSnackbarContent(
-              title: 'Hotel added to wishlist!',
-              message: 'Thank you for choosing our hotel.',
-              contentType: ContentType.success,
-            ),
+            content: Text('failed'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -147,30 +132,38 @@ class _HotelTabState extends State<HotelTab> {
         return;
       }
 
-      // Add the hotel data to the wishlisthotels collection
-      await FirebaseFirestore.instance.collection('wishlisthotels').add({
+      // Add the hotel data to   the wishlisthotels collection
+      await FirebaseFirestore.instance.collection('wishlisthotels').doc(hotelId).set({
         'email': email,
-        'name': snapshot['name'],
-        'address': snapshot['address'],
-        'price': snapshot['price'],
-        'imageurl': snapshot['imageurl'],
+
+
         'id': hotelId,
       });
 
       // Show a snackbar to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-
-          content: Text('Hotel added to wishlist!'),
-          backgroundColor: Colors.green,
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: Text('Success'),
           duration: Duration(seconds: 2),
         ),
+
       );
 
       // Set the loading state back to false
       setState(() {
         _isLoading = false;
       });
+    }
+    void deleteHotel(String hotelId) {
+      FirebaseFirestore.instance
+          .collection('wishlisthotels')
+          .doc(hotelId)
+          .delete()
+          .then((value) => print('Unfollowed'))
+          .catchError((error) => print('Failed to delete car: $error'));
     }
 
     return InkWell(
@@ -308,9 +301,6 @@ class _HotelTabState extends State<HotelTab> {
             ),
 
 
-
-
-
             Positioned(
               top: 10.0,
               left: 10.0,
@@ -326,52 +316,41 @@ class _HotelTabState extends State<HotelTab> {
 
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
-                      return Lottie.asset('assets/icons/135803-loader.json');
+                      return CircularProgressIndicator();
                     default:
                       if (snapshot.data!.docs.isNotEmpty) {
-                        return Container(
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 2.0,right: 2),
+                          child: GestureDetector(
 
-                          child: Icon(Icons.favorite,color: Theme.of(context).primaryColor.withOpacity(0.8),size: 30,),
+                            onTap:_isLoading
+                                ? null // Disable the button while loading
+                                : () => deleteHotel(hotelId),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.favorite_outlined,color: Theme.of(context).primaryColor,size: 30,),
+                            ),
+                          ),
                         );
                       } else {
-                        return Container(
-                          height: 30,
+                        return GestureDetector(
 
-
-
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-
-                                  child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),
-                              onTap:_isLoading
-                                  ? null // Disable the button while loading
-                                  : () => _wishlistHotel(hotelId, context),),
-
-
-
-                              if (_isLoading)
-                                Positioned.fill(
-                                  child: Container(
-                                    color: Theme.of(context).primaryColor.withOpacity(0.5),
-                                    child: Center(
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),
                           ),
+                          onTap:_isLoading
+                              ? null // Disable the button while loading
+                              : () => _wishlistHotel(hotelId, context),
                         );
                       }
                   }
                 },
               ),
             ),
+
+
+
 
           ],
         ),
@@ -670,7 +649,7 @@ class _HotelTabState extends State<HotelTab> {
                                 Positioned.fill(
                                   child: Container(
                                     color: Theme.of(context).primaryColor.withOpacity(0.5),
-                                    child: Center(
+                                    child: const Center(
                                       child: CircularProgressIndicator(
                                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                       ),
