@@ -154,7 +154,7 @@ class _HotelCarouselState extends State<HotelCarousel> {
               }
 
               return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // Number of columns
                   crossAxisSpacing: 2.0,
                   mainAxisSpacing: 2.0,
@@ -175,7 +175,6 @@ class _HotelCarouselState extends State<HotelCarousel> {
                   final hotelId = document.get('id');
                   final user = FirebaseAuth.instance.currentUser;// <-- Get the hotel ID
                   bool _isLoading = false;
-
 
                   return  Padding(
                     padding: const EdgeInsets.only(left: 6.0,bottom: 20),
@@ -331,9 +330,50 @@ class _HotelCarouselState extends State<HotelCarousel> {
                                   Row(
                                     children: [
                                       Icon(Icons.star,color: Colors.yellow.shade700,size: 16,),
-                                      Text(
-                                        '4.2',
-                                        style: GoogleFonts.dmSerifDisplay(fontSize: 18,   color: Colors.black),
+                                      Center(
+                                        child: StreamBuilder(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('hotelratings')
+                                              .where('destination_id', isEqualTo: document['id'])
+                                              .snapshots(),
+                                          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              return CircularProgressIndicator();
+                                            }
+                                            if (snapshot.hasError) {
+                                              return Text('Error: ${snapshot.error}');
+                                            }
+                                            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                                              return Text(
+                                                '0.0',
+                                                style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+
+                                              );
+                                            }
+
+                                            // Calculate the average rating
+                                            double totalRating = 0;
+                                            snapshot.data!.docs.forEach((doc) {
+                                              totalRating += doc['rating'] ?? 0;
+                                            });
+
+                                            double averageRating = totalRating / snapshot.data!.docs.length;
+
+                                            return Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${averageRating.toStringAsFixed(1)}',
+                                                  style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+
+                                                ),
+
+                                                // You can display other information about the destination here
+                                              ],
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ],
                                   )
@@ -489,16 +529,6 @@ class _TDState extends State<TD> {
 
 
 
-    Future<bool> isUserFollowing(String userEmail, String hotelId) async {
-      final QuerySnapshot wishlistSnapshot = await FirebaseFirestore.instance
-          .collection('ishlistplacestovisit')
-          .where('email', isEqualTo: userEmail)
-          .where('id', isEqualTo: hotelId)
-          .get();
-
-      return wishlistSnapshot.docs.isNotEmpty;
-    }
-
 
     return Column(
       children: [
@@ -532,8 +562,8 @@ class _TDState extends State<TD> {
               return GridView.builder(
                             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                crossAxisCount: 2, // Number of columns
-               crossAxisSpacing: 2.0,
-               mainAxisSpacing: 2.0,
+               crossAxisSpacing: 5.0,
+               mainAxisSpacing: 5.0,
                             ),
                    scrollDirection: Axis.vertical,
                 itemCount: snapshot.data!.docs.length,
@@ -546,116 +576,169 @@ class _TDState extends State<TD> {
                      final user = FirebaseAuth.instance.currentUser;// <-- Get the hotel ID
                      bool _isLoading = false;
               return  GestureDetector(
-                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreen(document),),);},
+                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreens(document),),);},
+            //    onLongPress: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreen(document),),);},
 
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      //   border: Border.all( color: Colors.red,)
-                    ),
-                    padding: const EdgeInsets.only(right: 6.0),
+                child: Container(
 
 
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
-                          children: [
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Stack(
+                        children: [
 
-                            Container(
-                              height: 140,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                           borderRadius: BorderRadius.circular(60),
-                                           image: DecorationImage(image: AssetImage('$imageurl'))
-                              ),
+                          Container(
+                            height: 140,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                         borderRadius: BorderRadius.circular(60),
+                                         image: DecorationImage(image: AssetImage('$imageurl'))
                             ),
+                          ),
 
 
-                            Positioned(
-                              left: 10.0,
-                              top: 10.0,
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection('wishlistplacestovisit')
-                                    .where('email', isEqualTo: user!.email)
-                                    .where('id', isEqualTo: hotelId)
-                                    .snapshots(),
-                                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  }
+                          Positioned(
+                            left: 10.0,
+                            top: 10.0,
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance.collection('wishlistplacestovisit')
+                                  .where('email', isEqualTo: user!.email)
+                                  .where('id', isEqualTo: hotelId)
+                                  .snapshots(),
+                              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                }
 
-                                  switch (snapshot.connectionState) {
-                                    case ConnectionState.waiting:
-                                      return Lottie.asset('assets/icons/135803-loader.json',height: 50,);
-                                    default:
-                                      if (snapshot.data!.docs.isNotEmpty) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(left: 2.0,right: 2),
-                                          child: GestureDetector(
-
-                                            onTap:_isLoading
-                                                ? null // Disable the button while loading
-                                                : () => deleteHotel(hotelId),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Icon(Icons.favorite_outlined,color: Theme.of(context).primaryColor,size: 30,),
-                                            ),
-                                          ),
-                                        );
-                                      } else {
-                                        return GestureDetector(
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return Lottie.asset('assets/icons/135803-loader.json',height: 50,);
+                                  default:
+                                    if (snapshot.data!.docs.isNotEmpty) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(left: 2.0,right: 2),
+                                        child: GestureDetector(
 
                                           onTap:_isLoading
                                               ? null // Disable the button while loading
-                                              : () => _djfollowers(hotelId, context),
-
+                                              : () => deleteHotel(hotelId),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,),
+                                            child: Container(
+
+
+
+                                                decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(30)
+                                            ),
+
+
+
+                                                child: Icon(Icons.favorite_outlined,color: Theme.of(context).primaryColor,size: 30,),),
+
                                           ),
-                                        );
-                                      }
-                                  }
-                                },
-                              ),
-                            ),
+                                        ),
+                                      );
+                                    } else {
+                                      return GestureDetector(
 
-                          ],
-                        ),
+                                        onTap:_isLoading
+                                            ? null // Disable the button while loading
+                                            : () => _djfollowers(hotelId, context),
 
-                        Text(
-                          '$name',
-                          style: GoogleFonts.dmSerifDisplay(fontSize: 18,   color: Colors.black),maxLines: 1,
-                        ),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-               '$address',
-               style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor,),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            decoration:BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(30)
+                                            ),
+                                              child: Icon(Icons.favorite_outline,color: Theme.of(context).primaryColor,size: 30,)),
+                                        ),
+                                      );
+                                    }
+                                }
+                              },
                             ),
-                            Row(
-               children: [
-                 const Icon(Icons.star,color: Colors.yellow,size: 15,),
-                 Text(
-                   '4.0',
-                   style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                          ),
+
+                        ],
+                      ),
+
+                      Text(
+                        '$name',
+                        style: GoogleFonts.dmSerifDisplay(fontSize: 18,   color: Colors.black),maxLines: 1,
+                      ),
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                               '$address',
+                               style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor,),
+                          ),
+                          Row(
+                               children: [
+                                 const Icon(Icons.star,color: Colors.yellow,size: 15,),
+                                 Center(
+                 child: StreamBuilder(
+                   stream: FirebaseFirestore.instance
+                       .collection('ratings')
+                       .where('destination_id', isEqualTo: document['id'])
+                       .snapshots(),
+                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                     if (snapshot.connectionState == ConnectionState.waiting) {
+                       return CircularProgressIndicator();
+                     }
+                     if (snapshot.hasError) {
+                       return Text('Error: ${snapshot.error}');
+                     }
+                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                       return Text(
+                         '0.0',
+                         style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+
+                       );
+                     }
+
+                     // Calculate the average rating
+                     double totalRating = 0;
+                     snapshot.data!.docs.forEach((doc) {
+                       totalRating += doc['rating'] ?? 0;
+                     });
+
+                     double averageRating = totalRating / snapshot.data!.docs.length;
+
+                     return Column(
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       crossAxisAlignment: CrossAxisAlignment.center,
+                       children: [
+                         Text(
+                          '${averageRating.toStringAsFixed(1)}',
+                           style: GoogleFonts.dmSerifDisplay(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+
+                         ),
+
+                         // You can display other information about the destination here
+                       ],
+                     );
+                   },
                  ),
-                 Text(
-                   ' (120+)',
-                   style: GoogleFonts.dmSerifDisplay(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey[600]),
-                 ),
-               ],
-                            ),
+                                 ),
 
-                          ],
-                        ),
-                      ],
-                    ),
-                    // width: 250,
+                                 Text(
+                 ' (120+)',
+                 style: GoogleFonts.dmSerifDisplay(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                                 ),
+                               ],
+                          ),
+
+                        ],
+                      ),
+                    ],
                   ),
+                  // width: 250,
                 ),
               );
 

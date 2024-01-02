@@ -743,7 +743,70 @@ class _HotelTabState extends State<HotelTab> {
 
 
 
+class HotelRatingState extends ChangeNotifier {
+  int _currentRating = 0;
 
+  int get currentRating => _currentRating;
+
+
+  void updateRating(int newRating) {
+    _currentRating = newRating;
+    notifyListeners();
+  }
+
+  Future<void> submitRating(BuildContext context, String destinationId, int rating) async {
+    final CollectionReference ratings = FirebaseFirestore.instance.collection('hotelratings');
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    // Query for an existing rating with the same user email and destination ID
+    QuerySnapshot existingRatings = await ratings
+        .where('hotel_id', isEqualTo: destinationId)
+        .where('email', isEqualTo: userEmail)
+        .get();
+
+    // Use a Firestore transaction to either update or add a new rating
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      if (existingRatings.docs.isNotEmpty) {
+        // If a rating exists for the user and destination, update the existing rating
+        DocumentSnapshot ratingSnapshot = existingRatings.docs.first;
+        transaction.update(ratingSnapshot.reference, {'rating': rating});
+      } else {
+        // If no rating exists, create a new document with the provided data
+        await ratings.add({
+          'destination_id': destinationId,
+          'rating': rating,
+          'email': userEmail,
+          // Other data associated with the rating can be added here
+        });
+      }
+    });
+
+    // Update the state with the latest rating
+    updateRating(rating);
+  }
+  Future<void> fetchRatingForHotel(String destinationId) async {
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('hotelratings')
+        .where('hotel_id', isEqualTo: destinationId)
+    //   .where('email', isEqualTo: userEmail) // Filter by user's email
+        .get();
+
+    int totalRating = 0;
+    int count = 0;
+
+    snapshot.docs.forEach((doc) {
+      totalRating += doc['rating'] as int;
+      count++;
+    });
+
+    if (count > 0) {
+      double averageRating = totalRating / count;
+      updateRating(averageRating.round());
+    }
+  }
+}
 
 
 class HotelDetailScreen extends StatelessWidget {
@@ -1411,8 +1474,8 @@ class HotelDetailScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    Container(
-                                      width: 300.0,
+                                    Expanded(
+
                                       child: Text(
                                         documen['description'],
                                         style:  GoogleFonts.andika(

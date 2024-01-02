@@ -111,6 +111,7 @@ class _DestinationCarouselState extends State<DestinationCarousel> {
 
 
                   return GestureDetector(
+                 //   onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreen(document),),);},
                     onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationDetailScreen(document),),);},
 
                     child: Container(
@@ -374,7 +375,7 @@ class DestinationDetailScreen extends StatelessWidget {
             body:  DefaultTabController(
               length: 1,
               child: CustomScrollView(
-      
+
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 slivers: <Widget>[
@@ -393,18 +394,18 @@ class DestinationDetailScreen extends StatelessWidget {
                         StretchMode.zoomBackground,
                         StretchMode.blurBackground,
                         StretchMode.fadeTitle,
-      
+
                       ],
                       centerTitle: true,
                       title:  AnimatedTextKit(
                         animatedTexts: [
                           TyperAnimatedText(document['name'],textStyle: GoogleFonts.bebasNeue(color: Colors.white)),
-      
-      
-      
+
+
+
                         ],
                         pause: const Duration(milliseconds: 3000),
-      
+
                         stopPauseOnTap: true,
                         repeatForever: true,
                       ),
@@ -412,7 +413,7 @@ class DestinationDetailScreen extends StatelessWidget {
                         fit: StackFit.expand,
                         children: <Widget>[
                           // Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg', fit: BoxFit.cover,),
-      
+
                           CarouselSlider(
                             items: [
                               Image.asset(
@@ -435,40 +436,40 @@ class DestinationDetailScreen extends StatelessWidget {
                               enlargeCenterPage: false,
                             ),
                           ),
-      
-      
-      
+
+
+
                         ],
                       ),
                     ),
                   ),
-      
-      
+
+
                   SliverList(
                     delegate: SliverChildListDelegate(
                       <Widget>[
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         Column(
-      
-      
+
+
                           children: [
 
 
@@ -497,11 +498,11 @@ class DestinationDetailScreen extends StatelessWidget {
                                 Text('Current Rating: ${ratingState.currentRating}'),
                               ],
                             ),
-      
+
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
-      
+
                                 child: Text(
                                   document['desc'],
                                   style: GoogleFonts.andika(
@@ -509,31 +510,31 @@ class DestinationDetailScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                   ),
                                  // overflow: TextOverflow.visible,
-      
+
                                 ),
                               ),
                             ),
-      
-      
-      
-      
-      
+
+
+
+
+
                           ],),
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         // ListTiles++
                       ],
                     ),
@@ -541,7 +542,352 @@ class DestinationDetailScreen extends StatelessWidget {
                 ],
               ),
             ),
-      
+
+          );
+        }
+      ),
+    );
+  }
+}
+
+
+class DestinationDetailScreens extends StatefulWidget {
+
+
+  final DocumentSnapshot document;
+
+
+
+  bool isLoading = false;
+
+  DestinationDetailScreens(this.document);
+
+
+  final _formKey = GlobalKey<FormState>();
+  late String _title;
+  late String _description;
+  late String _hotelname;
+
+
+
+
+  void _submitForm() {
+
+
+    _formKey.currentState?.save();
+
+    _uploadData();
+
+  }
+
+  void _uploadData() async {
+
+    final url = Uri.https('markiniltd.com', '/add.php');
+    final response = await http.post(url,
+        body: {'title': _title, 'description': _description});
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      if (responseBody['status'] == 'success') {
+
+        print('Succesfull');
+      }
+
+      else {
+        print('Error');
+      }
+    } else {
+      print('Error');
+    }
+  }
+
+
+
+
+  Text _buildRatingStars(int rating) {
+    String stars = '';
+    for (int i = 0; i < rating; i++) {
+      stars += '⭐ ';
+    }
+    stars.trim();
+    return Text(stars);
+  }
+
+
+
+
+
+
+
+
+
+  @override
+  State<DestinationDetailScreens> createState() => _DestinationDetailScreensState();
+}
+
+class _DestinationDetailScreensState extends State<DestinationDetailScreens> {
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, dynamic>? documentData = widget.document.data() as Map<String, dynamic>?;
+    String imageUrl = documentData?['imageurl'] ?? ''; // Replace 'imageurl' with your field name
+    String description = documentData?['desc'] ?? ''; // Replace 'desc' with your field name
+    String name = documentData?['name'] ?? ''; // Replace 'desc' with your field name
+    String id = documentData?['id'] ?? ''; // Replace 'desc' with your field name
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
+    return ChangeNotifierProvider(
+      create: (_) => RatingState(),
+      child: Consumer<RatingState>(
+        builder: (context, ratingState, _) {
+          return Scaffold(
+            body:  DefaultTabController(
+              length: 1,
+              child: CustomScrollView(
+
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                slivers: <Widget>[
+                  SliverAppBar(
+                    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
+                    pinned: true,
+                    stretch: true,
+                    onStretchTrigger: () {
+                      // Function callback for stretch
+                      return Future<void>.value();
+                    },
+                    expandedHeight: 300.0,
+                    shadowColor: Colors.red[100],
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: const <StretchMode>[
+                        StretchMode.zoomBackground,
+                        StretchMode.blurBackground,
+                        StretchMode.fadeTitle,
+
+                      ],
+                      centerTitle: true,
+                      title:  AnimatedTextKit(
+                        animatedTexts: [
+                          TyperAnimatedText('$name',textStyle: GoogleFonts.bebasNeue(color: Colors.white)),
+
+
+
+                        ],
+                        pause: const Duration(milliseconds: 3000),
+
+                        stopPauseOnTap: true,
+                        repeatForever: true,
+                      ),
+                      background: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          // Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg', fit: BoxFit.cover,),
+
+                          CarouselSlider(
+                            items: [
+                              Image.asset(
+                                '$imageUrl',
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '$imageUrl',
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '$imageUrl',
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                            options: CarouselOptions(
+                              height: 355,
+                              viewportFraction: 1.0,
+                              autoPlay: true,
+                              enlargeCenterPage: false,
+                            ),
+                          ),
+
+
+
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      <Widget>[
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(5, (index) {
+                                  final int displayIndex = index + 1;
+                                  return IconButton(
+                                    icon: Icon(
+                                      displayIndex <= ratingState.currentRating ? Icons.star : Icons.star_border,
+                                      color: Colors.amber,
+                                    ),
+                                    onPressed: () {
+                                      ratingState.submitRating(context, '$id', displayIndex);
+                                    },
+                                  );
+                                }),
+                              ),
+                            ),
+                            // Show the current rating text
+
+                          ],
+                        ),
+
+                        Center(
+                          child: StreamBuilder(
+
+                            stream: FirebaseFirestore.instance
+                                .collection('ratings')
+                                .where('destination_id', isEqualTo: '$id')
+                                .where('email', isEqualTo: userEmail)
+                                .snapshots(),
+                            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              }
+                              if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              }
+                              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                                return Text('No ratings yet');
+                              }
+
+                              // Calculate the average rating
+                              double totalRating = 0;
+                              snapshot.data!.docs.forEach((doc) {
+                                totalRating += doc['rating'] ?? 0;
+                              });
+
+                              double averageRating = totalRating / snapshot.data!.docs.length;
+
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'My Current Rating: ${averageRating.toStringAsFixed(0)}'
+                                  ),
+                                  // You can display other information about the destination here
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        Center(
+                          child: StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection('ratings')
+                                .where('destination_id', isEqualTo: '$id')
+                                .snapshots(),
+                            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              }
+                              if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              }
+                              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                                return Text('No ratings yet');
+                              }
+
+                              // Calculate the average rating
+                              double totalRating = 0;
+                              snapshot.data!.docs.forEach((doc) {
+                                totalRating += doc['rating'] ?? 0;
+                              });
+
+                              double averageRating = totalRating / snapshot.data!.docs.length;
+
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Average Rating: ${averageRating.toStringAsFixed(1)}'
+                                  ),
+                                  // You can display other information about the destination here
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        Column(
+
+
+                          children: [
+
+
+
+
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+
+                                child: Text(
+                                  '$description',
+                                  style: GoogleFonts.andika(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  // overflow: TextOverflow.visible,
+
+                                ),
+                              ),
+                            ),
+
+
+
+
+
+                          ],),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        // ListTiles++
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
           );
         }
       ),
